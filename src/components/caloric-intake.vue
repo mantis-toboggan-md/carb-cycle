@@ -21,12 +21,18 @@
         <th>Saturday</th>
       </tr>
       <tr>
+        <td>Surplus/Deficit (%)</td>
+        <td v-for="(day, i) in macrosByDay"><input type="number" v-model="surplusByDay[i]"></td>
+      </tr>
+      <tr>
         <td>TDEE</td>
         <td v-for="tdee in tdeeByDay" v-show="tdee !== 'NaN'">{{tdee}}</td>
       </tr>
       <tr>
-        <td>Surplus/Deficit (%)</td>
-        <td v-for="(day, i) in macrosByDay"><input type="number" v-model="surplusByDay[i]"></td>
+        <td>
+          Goal Intake
+        </td>
+        <td v-for="(day, i) in macrosByDay">{{macrosByDay[i].goalCals}}</td>
       </tr>
       <tr>
         <td>Protein</td>
@@ -111,12 +117,12 @@
           //set goal caloric intake
           macrosByDay[i].goalCals = parseInt(dayTdee);
 
-          if(this.surplusByDay[i] != 0){
-             macrosByDay[i].goalCals = dayTdee*(macrosByDay[i].surplus/100)
+          if(parseInt(this.surplusByDay[i]) != 0){
+             macrosByDay[i].goalCals = parseInt(dayTdee) + dayTdee*(this.surplusByDay[i]/100)
           }
 
-          //if in surplus, lower protein reqs
-          if(this.surplusByDay[i]>=0){
+          //if in deficit, raise protein reqs
+          if(this.surplusByDay[i]<0){
             if(this.bfPercent < 25){
               macrosByDay[i].protein = this.leanBodyMass * 1.3;
             } else if (this.bfPercent >= 25 && this.bfPercent < 30) {
@@ -125,7 +131,7 @@
             else{
               macrosByDay[i].protein = this.leanBodyMass * 0.9;
             }
-            //higher protein req in deficit
+            //lower protein in surplus
           } else{
             if(this.bfPercent < 25){
               macrosByDay[i].protein = this.leanBodyMass * 1.1;

@@ -1,17 +1,29 @@
 <template>
   <div id="foodMain">
-  Enter your weight:
-  <input type = "number" v-model = "givenWeight" placeholder = "weight(lbs)">
-  Enter your approximate bodyfat %:
-  <input type = "number" v-model = "bfPercent" placeholder = "default: 30%">
-  <!-- {{$data}} -->
+    <div class = "md-layout">
+      <div class = "md-layout-item">
+        <md-toolbar class="md-primary md-large">
+          <span class="md-title">carb cycle</span>
+        </md-toolbar>
+      </div>
+    </div>
+    <div class = "md-layout">
+        <!-- {{$data}} -->
+    </div>
 
-
-
-
-  <activity-level :givenWeight = "givenWeight" :bfPercent = "bfPercent" v-on:set-activity="getActivity"></activity-level>
-  <caloric-intake :givenWeight = "givenWeight" :bfPercent = "bfPercent" :activityByDay="activityByDay" :tdeeByDay = "tdeeByDay"></caloric-intake>
-</div>
+      <div class = "md-layout">
+        <div class = "md-layout-item">
+          <md-tabs>
+              <md-tab md-label = "Activity Level">
+                <activity-level v-on:set-activity="getActivity"></activity-level>
+              </md-tab>
+              <md-tab md-label = "Caloric Intake">
+                <caloric-intake :givenWeight = "givenWeight" :bfPercent = "bfPercent" :activityByDay="activityByDay" :tdeeByDay = "tdeeByDay"></caloric-intake>
+              </md-tab>
+          </md-tabs>
+        </div>
+      </div>
+  </div>
 </template>
 
 <script>
@@ -33,7 +45,9 @@ export default {
   methods: {
     getActivity: function(givenActivity){
       this.activityByDay = givenActivity[0];
-      this.tdeeByDay = givenActivity[1]
+      this.tdeeByDay = givenActivity[1];
+      this.givenWeight = givenActivity[2];
+      this.bfPercent = givenActivity[3]
     }
   },
 
@@ -46,4 +60,7 @@ export default {
 </script>
 
 <style>
+
+
+
 </style>
