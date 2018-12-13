@@ -13,14 +13,15 @@
 
       <div class = "md-layout">
         <div class = "md-layout-item">
-          <md-tabs>
-              <md-tab md-label = "Activity Level">
+          <md-steppers :md-active-step.sync="currStep" md-linear md-vertical>
+              <md-step id="first" md-label="Activity Level" :md-done.sync="first" :md-error="noWeightErr">
                 <activity-level v-on:set-activity="getActivity"></activity-level>
-              </md-tab>
-              <md-tab md-label = "Caloric Intake">
+                 <md-button class="md-raised md-primary" @click="setDone('first', 'second')">Continue</md-button>
+              </md-step>
+              <md-step id="second" md-label="Macro Breakdown" :md-done.sync="second">
                 <caloric-intake :givenWeight = "givenWeight" :bfPercent = "bfPercent" :activityByDay="activityByDay" :tdeeByDay = "tdeeByDay"></caloric-intake>
-              </md-tab>
-          </md-tabs>
+              </md-step>
+          </md-steppers>
         </div>
       </div>
   </div>
@@ -39,6 +40,10 @@ export default {
       bfPercent: '',
       activityByDay: '',
       tdeeByDay: '',
+      currStep: "first",
+      first: false,
+      second: false,
+      noWeightErr: null
     }
   },
 
@@ -48,7 +53,19 @@ export default {
       this.tdeeByDay = givenActivity[1];
       this.givenWeight = givenActivity[2];
       this.bfPercent = givenActivity[3]
-    }
+    },
+    setDone: function(id, index){
+        this[id] = true
+        console.log(this.first)
+        if(!this.givenWeight){
+            this.noWeightErr = 'Enter weight to continue'
+        }else{
+          this.noWeightErr = null
+          if (index) {
+            this.currStep = index
+          }
+        }
+      }
   },
 
   components: {
@@ -60,7 +77,12 @@ export default {
 </script>
 
 <style>
-
-
+.md-layout-item{
+  width:100vw;
+}
+.md-steppers{
+  padding-left: 5vw;
+  padding-right:5vw;
+}
 
 </style>

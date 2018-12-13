@@ -15,12 +15,26 @@
          <span class="md-helper-text">Default is 30</span>
       </md-field>
     </div>
+    <div class="md-layout-item">
+      <md-button class="md-raised md-accent" v-on:click="setActivty()">
+        Set Activity Level
+      </md-button>
+    </div>
   </div>
   <!-- <md-content> -->
     <div class="md-layout md-gutter" id="activity-input-table">
       <div class="md-layout-item activity-cols" v-for="day in activityByDay">
         {{day.day}}
         <div class="activity-by-day-inputs">
+          <md-field>
+          <md-select v-model="day.selectedNEAT" name ="day.selectedNEAT" md-dense>
+            <md-option value = "Sedentary">Sedentary</md-option>
+            <md-option value = "Lightly Active">Lightly Active</md-option>
+            <md-option value = "Moderately Active">Moderately Active</md-option>
+            <md-option value = "Very Active">Very Active</md-option>
+          </md-select>
+          <span class="md-helper-text">non-exercise activity</span>
+        </md-field>
           <md-field>
           <md-input v-model="day.lightCardio" class="activity-input-box"></md-input>
           <span class="md-helper-text">light cardio</span>
@@ -43,159 +57,7 @@
     </div>
   <!-- </md-content> -->
     </div>
-
   </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!--
-    <button v-on:click="setActivty()">
-      Set Activity Level
-    </button>
-    Enter your weight:
-    <input type = "number" v-model = "givenWeight" placeholder = "weight(lbs)">
-    Enter your approximate bodyfat %:
-    <input type = "number" v-model = "bfPercent" placeholder = "default: 30%">
-    <div class="md-layout md-gutter">
-    <div class="md-layout-item">
-    <md-table>
-      <md-table-row>
-        <md-table-head>Activity Type</md-table-head>
-        <md-table-head>Sunday</md-table-head>
-        <md-table-head>Monday</md-table-head>
-        <md-table-head>Tuesday</md-table-head>
-        <md-table-head>Wednesday</md-table-head>
-        <md-table-head>md-table-headursday</md-table-head>
-        <md-table-head>Friday</md-table-head>
-        <md-table-head>Saturday</md-table-head>
-      </md-table-row>
-      <md-table-row>
-        <md-table-cell>Non-exercise Activity Level</md-table-cell>
-        <md-table-cell v-for="day in activityByDay">
-          <md-field>
-          <md-select v-model="day.selectedNEAT" name ="day.selectedNEAT" md-dense>
-            <md-option value = "Lightly Active">Lightly Active</md-option>
-            <md-option value = "Moderately Active">Moderately Active</md-option>
-            <md-option value = "Very Active">Very Active</md-option>
-          </md-select>
-        </md-field>
-        </md-table-cell>
-      </md-table-row>
-      <md-table-row>
-        <md-table-cell>Strength training</md-table-cell>
-        <md-table-cell v-for="day in activityByDay">
-          <md-field>
-            <md-input type ="number" v-model="day.str"/>
-          </md-field>
-        </md-table-cell>
-      </md-table-row>
-      <md-table-row>
-        <md-table-cell>Light Cardio</md-table-cell>
-        <md-table-cell v-for="day in activityByDay">
-          <md-field>
-            <md-input v-model="day.lightCardio"/>
-          </md-field>
-        </md-table-cell>
-      </md-table-row>
-      <md-table-row>
-        <md-table-cell>Moderate Cardio</md-table-cell>
-        <md-table-cell v-for="day in activityByDay">
-          <md-field>
-            <md-input v-model="day.moderateCardio"/>
-          </md-field>
-        </md-table-cell>
-      </md-table-row>
-      <md-table-row>
-        <md-table-cell>Intense Cardio</md-table-cell>
-        <md-table-cell v-for="day in activityByDay">
-          <md-field>
-            <md-input v-model="day.intenseCardio"/>
-          </md-field>
-        </md-table-cell>
-      </md-table-row>
-    </md-table>
-
-    </div>
-    </div>
-    <p>Total time spent:</p>
-    <ul>
-      <li>Strength training: {{totalStr}} minutes</li>
-      <li>Light Cardio: {{totalLightCardio}} minutes</li>
-      <li>Moderate Cardio: {{totalModerateCardio}} minutes</li>
-      <li>Intense Cardio: {{totalIntenseCardio}} minutes</li>
-    </ul> -->
-    <!-- <table>
-      <tr>
-        <th></th>
-        <th>Sunday</th>
-        <th>Monday</th>
-        <th>Tuesday</th>
-        <th>Wednesday</th>
-        <th>Thursday</th>
-        <th>Friday</th>
-        <th>Saturday</th>
-      </tr>
-      <tr>
-        <td>tdEE</td>
-        <td v-for="tdee in tdeeByDay" v-show="tdee !== 'NaN'">{{tdee}}</td>
-      </tr>
-    </table> -->
-<!--
-    <br> -->
-     <!-- {{ $data }} -->
-
-  <!-- </div> -->
 </template>
 
 <script>
@@ -203,57 +65,57 @@ import caloricIntake from '@/components/caloric-intake'
   export default {
     name: 'activity-level',
 
-    props: ['givenWeight', 'bfPercent'],
+    // props: ['givenWeight', 'bfPercent'],
 
     data () {
       return{
-        // givenWeight: '',
-        // bfPercent: '',
+        givenWeight: '',
+        bfPercent: '',
         activityByDay: [
           {day: "sunday",
-            selectedNEAT: 'Lightly Active',
+            selectedNEAT: 'Sedentary',
             str: 0,
             lightCardio: 0,
             moderateCardio: 0,
             intenseCardio: 0,
           },
           {day: "monday",
-            selectedNEAT: 'Lightly Active',
+            selectedNEAT: 'Sedentary',
             str: 0,
             lightCardio: 0,
             moderateCardio: 0,
             intenseCardio: 0,
           },
           {day: "tuesday",
-            selectedNEAT: 'Lightly Active',
+            selectedNEAT: 'Sedentary',
             str: 0,
             lightCardio: 0,
             moderateCardio: 0,
             intenseCardio: 0,
           },
           {day: "wednesday",
-            selectedNEAT: 'Lightly Active',
+            selectedNEAT: 'Sedentary',
             str: 0,
             lightCardio: 0,
             moderateCardio: 0,
             intenseCardio: 0,
           },
           {day: "thursday",
-            selectedNEAT: 'Lightly Active',
+            selectedNEAT: 'Sedentary',
             str: 0,
             lightCardio: 0,
             moderateCardio: 0,
             intenseCardio: 0,
           },
           {day: "friday",
-            selectedNEAT: 'Lightly Active',
+            selectedNEAT: 'Sedentary',
             str: 0,
             lightCardio: 0,
             moderateCardio: 0,
             intenseCardio: 0,
           },
           {day: "saturday",
-            selectedNEAT: 'Lightly Active',
+            selectedNEAT: 'Sedentary',
             str: 0,
             lightCardio: 0,
             moderateCardio: 0,
@@ -322,7 +184,7 @@ import caloricIntake from '@/components/caloric-intake'
                 neat = rmr * 1.8;
                 break;
               default:
-                neat = rmr * 1.45;
+                neat = rmr * 1.3;
             }
             //use NEAT and provided exercise times to calculate tdEE for each day
             tdeeByDay[i] = (neat + rmr * (0.175 * currDay.lightCardio/60 + 0.25 * currDay.moderateCardio/60 + 0.35 * currDay.intenseCardio/60 + 0.15 * currDay.str/60)).toFixed();
@@ -332,7 +194,7 @@ import caloricIntake from '@/components/caloric-intake'
     },
 
     methods: {
-      setActivty(){
+      setActivty: function(){
         this.$emit('set-activity', [this.activityByDay, this.tdeeByDay, this.givenWeight, this.bfPercent])
       }
     },
@@ -352,13 +214,12 @@ import caloricIntake from '@/components/caloric-intake'
 
 }
 #weightBF{
-    max-width:300px;
+    max-width:500px;
 }
 #activity-input-table{
-  margin: auto;
-  width:90%;
   display: flex;
   justify-content: space-around;
+  width: 100%;
 }
 .activity-cols{
   display: flex;

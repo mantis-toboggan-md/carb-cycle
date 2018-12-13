@@ -147,13 +147,13 @@
           switch (this.carbStyle){
             case 'Ketogenic':
               macrosByDay[i].carb = 25;
+              macrosByDay[i].fat = parseInt((macrosByDay[i].goalCals - (macrosByDay[i].protein + macrosByDay[i].carb)*4)/9)
               break;
+            case 'Carb me the FUCK up':
+              macrosByDay[i].fat = 30;
+              macrosByDay[i].carb = parseInt((macrosByDay[i].goalCals - (macrosByDay[i].protein*4 + macrosByDay[i].fat*9))/4)
           }
 
-          //fat is remaining cals after carbs and protein calculated
-          macrosByDay.map((day)=>{
-            day.fat = parseInt((macrosByDay[i].goalCals - (day.protein + day.carb)*4)/9)
-          })
 
 
 

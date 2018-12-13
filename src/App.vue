@@ -10,8 +10,13 @@ export default {
 }
 </script>
 
-<style>
-#app {
+<style lang="scss">
+@import "~vue-material/dist/theme/engine"; // Import the theme engine
 
-}
+@include md-register-theme("default", (
+  primary: #80cbc4, // The primary color of your application
+  accent: #fff9c4 // The accent or secondary color
+));
+
+@import "~vue-material/dist/theme/all"; // Apply the theme
 </style>
