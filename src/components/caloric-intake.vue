@@ -1,52 +1,53 @@
 /* eslint-disable */
 <template>
   <div id="caloricIntake">
-    Select carb consumption style:
-    <select v-model="carbStyle">
-      <option>Ketogenic</option>
-      <option>Day before exercise</option>
-      <option>Weekend refeeds</option>
-      <option>Carb me the FUCK up</option>
-      <option>Custom day-by-day</option>
-    </select>
-    <table>
-      <tr>
-        <th></th>
-        <th>Sunday</th>
-        <th>Monday</th>
-        <th>Tuesday</th>
-        <th>Wednesday</th>
-        <th>Thursday</th>
-        <th>Friday</th>
-        <th>Saturday</th>
-      </tr>
-      <tr>
-        <td>Surplus/Deficit (%)</td>
-        <td v-for="(day, i) in macrosByDay"><input type="number" v-model="surplusByDay[i]"></td>
-      </tr>
-      <tr>
-        <td>TDEE</td>
-        <td v-for="tdee in tdeeByDay" v-show="tdee !== 'NaN'">{{tdee}}</td>
-      </tr>
-      <tr>
-        <td>
-          Goal Intake
-        </td>
-        <td v-for="(day, i) in macrosByDay">{{macrosByDay[i].goalCals}}</td>
-      </tr>
-      <tr>
-        <td>Protein</td>
-        <td v-for="day in macrosByDay">{{day.protein.toFixed()}}</td>
-      </tr>
-      <tr>
-        <td>Carbs</td>
-        <td v-for="day in macrosByDay">{{day.carb}}</td>
-      </tr>
-      <tr>
-        <td>Fat</td>
-        <td v-for="day in macrosByDay">{{day.fat}}</td>
-      </tr>
-    </table>
+    <div class = "md-layout md-gutter">
+      <div class = "md-layout-item">
+        Select carb consumption style:
+        <md-field id = "carb-style-select">
+          <md-select v-model="carbStyle">
+            <md-option value = "Ketogenic">Ketogenic</md-option>
+            <md-option value = "Day Before Exercise">Day before exercise</md-option>
+            <md-option value = "Weekend Refeed">Weekend refeeds</md-option>
+            <md-option value = 'Carb me the FUCK up'>Carb me the FUCK up</md-option>
+            <md-option value = 'Custom day-by-day'>Custom day-by-day</md-option>
+          </md-select>
+        </md-field>
+      </div>
+    </div>
+      <div class = "md-layout md-gutter">
+        <div class = 'md-layout-item' id = 'macro-labels'>
+          <span>TDEE</span>
+          <span>Goal Intake</span>
+          <span>Protein</span>
+          <span>Carbs</span>
+          <span>Fat</span>
+        </div>
+        <div class = 'md-layout-item' v-for = "(day, i) in macrosByDay">
+          {{day.day}}
+          <md-field>
+          <md-input v-model = "surplusByDay[i]"></md-input>
+          <span class="md-helper-text">surplus (%)</span>
+        </md-field>
+        <div>
+          {{tdeeByDay[i]}}
+        </div>
+        <div>
+          {{macrosByDay[i].goalCals}}
+        </div>
+        <div>
+          {{macrosByDay[i].protein}}
+        </div>
+        <div>
+          {{macrosByDay[i].carb}}
+        </div>
+        <div>
+          {{macrosByDay[i].fat}}
+        </div>
+        </div>
+        Net caloric surplus: {{weeklySurplus}}
+      </div>
+    </div>
   </div>
 </template>
 
@@ -75,37 +76,37 @@
       },
       macrosByDay: function(){
         let macrosByDay = [
-          {
+          { day: 'Sunday',
             carb: '',
             fat: '',
             protein: ''
           },
-          {
+          { day: 'Monday',
             carb: '',
             fat: '',
             protein: ''
           },
-          {
+          { day: 'Tuesday',
             carb: '',
             fat: '',
             protein: ''
           },
-          {
+          { day: 'Wednesday',
             carb: '',
             fat: '',
             protein: ''
           },
-          {
+          { day: 'Thursday',
             carb: '',
             fat: '',
             protein: ''
           },
-          {
+          { day: 'Friday',
             carb: '',
             fat: '',
             protein: '',
           },
-          {
+          { day: 'Saturday',
             carb: '',
             fat: '',
             protein: ''
@@ -142,6 +143,7 @@
               macrosByDay[i].protein = this.leanBodyMass * 0.8;
             }
           }
+          macrosByDay[i].protein = Math.floor(macrosByDay[i].protein)
 
           //carbs by user-chosen style
           switch (this.carbStyle){
@@ -159,9 +161,27 @@
 
         }
         return macrosByDay;
-      }
+      },
+      weeklySurplus: function(){
+        let sum = 0;
+        for(let i = 0; i < 7; i++){
+          sum += (this.tdeeByDay[i]*this.surplusByDay[i]/100)
+        }
+        return sum;
     }
 
-
+  }
   }
 </script>
+
+<style scoped>
+#carb-style-select{
+  max-width: 300px;
+}
+
+#macro-labels{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+</style>
