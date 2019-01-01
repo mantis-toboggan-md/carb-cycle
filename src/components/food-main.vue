@@ -3,20 +3,27 @@
     <div class = "md-layout">
       <div class = "md-layout-item">
         <md-toolbar class="md-primary md-large">
-          <span class="md-title">carb cycle</span>
+          <div class="md-toolbar-row">
+            <div class="md-toolbar-section-start">
+              <span class="md-title">carb cycle</span>
+            </div>
+            <div class='md-toolbar-section-end'>
+              <!-- <a href='/login' id='login-button'>Login</a> -->
+             <router-link to="/login" id='login-button'>Login</router-link>
+           </div>
+         </div>
         </md-toolbar>
       </div>
     </div>
     <div class = "md-layout">
-        <!-- {{$data}} -->
+        <md-button v-on:click='getData()'>get data</md-button>
     </div>
-
+    butts: {{this.$store.state.activityStore.butts}}
       <div class = "md-layout">
         <div class = "md-layout-item">
           <md-steppers :md-active-step.sync="currStep" md-linear md-vertical>
               <md-step id="first" md-label="Activity Level" :md-done.sync="first" :md-error="noWeightErr">
                 <activity-level v-on:set-activity="getActivity"></activity-level>
-                 <md-button class="md-raised md-primary" @click="setDone('first', 'second')">Continue</md-button>
               </md-step>
               <md-step id="second" md-label="Macro Breakdown" :md-done.sync="second">
                 <caloric-intake :givenWeight = "givenWeight" :bfPercent = "bfPercent" :activityByDay="activityByDay" :tdeeByDay = "tdeeByDay"></caloric-intake>
@@ -30,6 +37,8 @@
 <script>
 import activityLevel from '@/components/activity-level'
 import caloricIntake from '@/components/caloric-intake'
+const axios = require('axios')
+// /axios.defaults.withCredentials = true
 
 export default {
   name: 'food-main',
@@ -53,19 +62,24 @@ export default {
       this.tdeeByDay = givenActivity[1];
       this.givenWeight = givenActivity[2];
       this.bfPercent = givenActivity[3]
+
+      //check that a weight was entered and move to next tab ('second')
+      this.first = true;
+      if(!this.givenWeight){
+             this.noWeightErr = 'Enter weight to continue'
+         }else{
+           this.noWeightErr = null
+           this.currStep = 'second'
+         }
     },
-    setDone: function(id, index){
-        this[id] = true
-        console.log(this.first)
-        if(!this.givenWeight){
-            this.noWeightErr = 'Enter weight to continue'
-        }else{
-          this.noWeightErr = null
-          if (index) {
-            this.currStep = index
-          }
-        }
-      }
+
+    //make axios call to get save data corresponding to username
+    getData: function(){
+      axios.get('http://localhost:8000/activity').then((response)=>{
+        console.log('ACTIVITY GOTTEN')
+      })
+    }
+
   },
 
   components: {
@@ -76,13 +90,28 @@ export default {
 
 </script>
 
-<style>
+<style lang="scss">
+.md-stepper-header:hover{
+  background-color: white;
+  transition: none;
+  & .md-stepper-text{
+    color: #82e9de !important;
+  }
+}
+.md-stepper-header{
+  & .md-ripple{
+    background-color: white;
+  }
+}
 .md-layout-item{
   width:100vw;
 }
 .md-steppers{
   padding-left: 5vw;
   padding-right:5vw;
+}
+#login-button{
+  color: white;
 }
 
 </style>

@@ -1,6 +1,6 @@
 /* eslint-disable */
 <template>
-  <div id="caloricIntake">
+  <div id="caloricIntake" class = "md-elevation-3">
     <div class = "md-layout md-gutter">
       <div class = "md-layout-item">
         Select carb consumption style:
@@ -16,14 +16,14 @@
       </div>
     </div>
       <div class = "md-layout md-gutter">
-        <div class = 'md-layout-item' id = 'macro-labels'>
+        <div class = 'md-layout-item activity-cols' id = 'macro-labels'>
           <span>TDEE</span>
           <span>Goal Intake</span>
           <span>Protein</span>
           <span>Carbs</span>
           <span>Fat</span>
         </div>
-        <div class = 'md-layout-item' v-for = "(day, i) in macrosByDay">
+        <div class = 'md-layout-item activity-cols' v-for = "(day, i) in macrosByDay">
           {{day.day}}
           <md-field>
           <md-input v-model = "surplusByDay[i]"></md-input>
@@ -45,8 +45,10 @@
           {{macrosByDay[i].fat}}
         </div>
         </div>
-        Net caloric surplus: {{weeklySurplus}}
       </div>
+      <div class = 'md-layout md-gutter' id="net-surplus">
+      Net caloric surplus: {{weeklySurplus}}
+    </div>
     </div>
   </div>
 </template>
@@ -175,13 +177,21 @@
 </script>
 
 <style scoped>
+.md-elevation-3{
+  padding: 5px;
+}
 #carb-style-select{
   max-width: 300px;
 }
-
+.md-layout{
+  width: 100%;
+  margin: 0;
+}
 #macro-labels{
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  background-color: white;
 }
+
 </style>
