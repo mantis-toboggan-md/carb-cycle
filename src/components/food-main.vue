@@ -18,7 +18,7 @@
     <div class = "md-layout">
         <md-button v-on:click='getData()'>get data</md-button>
     </div>
-    butts: {{this.$store.state.activityStore.butts}}
+    butts: {{this.$store.state}}
       <div class = "md-layout">
         <div class = "md-layout-item">
           <md-steppers :md-active-step.sync="currStep" md-linear md-vertical>
@@ -52,7 +52,7 @@ export default {
       currStep: "first",
       first: false,
       second: false,
-      noWeightErr: null
+      noWeightErr: null,
     }
   },
 

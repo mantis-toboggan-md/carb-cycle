@@ -2,7 +2,7 @@ const knex = require("../db/knex.js");
 const path = require('path')
 const bcrypt = require('bcrypt')
 const saltRounds = 10;
-
+const jwt = require('jsonwebtoken')
 
 module.exports = {
   getIndex: function(req, res) {
@@ -11,19 +11,19 @@ module.exports = {
   },
 
   postLogin: (req,res)=>{
-    console.log(req.body.username)
     knex('users').where('username', req.body.username).then((results)=>{
       if(!results[0]) {
-        console.log('no user found')
-        res.redirect('/')
+        res.send('no user found')
+        res.end()
       } else{
         bcrypt.compare(req.body.password, results[0].password, (err,isValid)=>{
           if(isValid){
-            req.session.username = req.body.username
-            res.redirect('/')
+            let user = results[0]
+            let token = jwt.sign({id:user.id}, 'supersecret', {expiresIn: 86400})
+            res.send({auth:true, token: token, user:user})
           } else{
-            console.log('invalid password')
-            res.redirect('/')
+            res.send('invalid password')
+            res.end()
           }
         })
       }
@@ -33,11 +33,11 @@ module.exports = {
   createAccount: (req,res)=>{
     knex('users').where('username', req.body.new_username).then(results=>{
       if(results[0]){
-        console.log('user already exists')
-        res.redirect('/')
+        res.send('user already exists')
+        res.end()
       } else if (req.body.new_password != req.body.new_password_conf){
-        console.log('passwords mismatched')
-        res.redirect('/')
+        res.send('passwords mismatched')
+        res.end()
       } else{
         bcrypt.hash(req.body.new_password, saltRounds, (err,hash)=>{
           if(err) throw err;
@@ -46,7 +46,7 @@ module.exports = {
             email: req.body.new_email,
             password: hash
           }).then(()=>{
-            res.redirect('/')
+            res.end('account created')
           })
         })
       }

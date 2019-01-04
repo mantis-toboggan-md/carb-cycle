@@ -82,10 +82,10 @@ let axios = require('axios')
 
     methods: {
       sendLogin: function(){
-        axios.post('http://localhost:8000/login', {
-          username: this.username,
-          password: this.password
-        })
+          let username = this.username
+          let password = this.password
+          this.$store.dispatch('login', { username, password })
+             .then(() => this.$router.push('/'))
       },
 
       createAccount: function(){

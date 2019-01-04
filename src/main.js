@@ -4,21 +4,29 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import Vuex from 'vuex'
-const activityStore = require('./store.js')
+import Store from './store.js'
+const store = new Store()
 
 import VueMaterial from 'vue-material'
 import 'vue-material/dist/vue-material.min.css'
+import Axios from 'axios'
 
+Vue.prototype.$http = Axios;
+const token = localStorage.getItem('token')
+if (token) {
+  Vue.prototype.$http.defaults.headers.common['Authorization'] = token
+}
 
 
 Vue.use(VueMaterial)
 Vue.use(Vuex)
 
-const store = new Vuex.Store({
-  modules: {
-    activityStore
-  }
-})
+// const store = new Vuex.Store({
+//   modules: {
+//     activityStore
+//   }
+// })
+
 
 Vue.config.productionTip = false
 /* eslint-disable no-new */

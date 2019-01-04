@@ -12,7 +12,15 @@ app.use(express.static(path.join(__dirname, "../dist")));
 require("./config/session.js")(app);
 var routes_setter = require('./config/routes.js');
 routes_setter(app);
+// CORS middleware
+const allowCrossDomain = function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', '*');
+    res.header('Access-Control-Allow-Headers', '*');
+    next();
+}
 
+app.use(allowCrossDomain)
 app.listen(port, function() {
   console.clear()
   console.log(cowsay.say({
