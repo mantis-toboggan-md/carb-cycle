@@ -4,6 +4,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const port = process.env.PORT || 8000;
 const cowsay = require('cowsay')
+const ducksay = require('ducksay')
 app.use(bodyParser.json({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -25,6 +26,6 @@ app.listen(port, function() {
   console.clear()
   console.log(cowsay.say({
     text: `server now running on port ${port}`,
-    f: 'sheep'
+    f: 'octopus'
   }))
 });

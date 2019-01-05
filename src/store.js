@@ -5,7 +5,7 @@ import VuexPersistence from 'vuex-persist'
 
 const vuexLocal = new VuexPersistence({
   //save only username when browser leaves page
-  reducer: (state) => ({user: state.user}),
+  // reducer: (state) => ({user: state.user}),
   //store state (only username) in localStorage in browser
   storage: window.localStorage
 })
@@ -23,13 +23,13 @@ const store = ()=> {
       auth_request(state){
         state.status = 'loading'
       },
-      auth_success(state, token, user){
+      auth_success(state, userData){
         state.status = 'success'
-        state.token = token
-        state.user = user
+        state.token = userData.token
+        state.user = userData.user
       },
-      auth_error(state){
-        state.status =  'error'
+      auth_error(state, msg){
+        state.status =  msg
       },
       logout(state){
         state.status = ''
@@ -42,10 +42,17 @@ const store = ()=> {
           commit('auth_request')
           console.log(user)
           axios({url:'http://localhost:8000/login', data:user, method: 'POST'}).then((res)=>{
-            const user = res.data.user
-            axios.defaults.headers.common['Authorization'] = res.data.token
-            commit('auth_success', user)
-            resolve(res)
+            if(typeof res.data == 'string'){
+              commit('auth_error', res.data)
+            } else {
+              const userData = {
+                user: res.data.user,
+                token: res.data.token
+              }
+              axios.defaults.headers.common['Authorization'] = userData.token
+              commit('auth_success', userData)
+              resolve(res)
+            }
           })
           .catch(err=>{
             commit('auth_error')
@@ -55,17 +62,17 @@ const store = ()=> {
       },
       register ({commit}, user){
         return new Promise((resolve, reject)=>{
-          commit('auth_req')
-          axios({url:'http://localhost:8000/register', data:user, method: 'POST'}).then((res)=>{
-            const user = res.data.user
-            axios.defaults.headers.common['Authorization'] = token
-            commit('auth_success', user)
-            resolve(res)
-          })
-          .catch(err=>{
-            commit('auth_error')
-            reject(err)
-          })
+            commit('auth_req')
+            axios({url:'http://localhost:8000/register', data:user, method: 'POST'}).then((res)=>{
+              const user = res.data.user
+              axios.defaults.headers.common['Authorization'] = token
+              commit('auth_success', user)
+              resolve(res)
+            })
+            .catch(err=>{
+              commit('auth_error')
+              reject(err)
+            })
         })
       },
       logout ({commit}){
@@ -78,7 +85,9 @@ const store = ()=> {
 
     },
     getters : {
-      authStatus: state => state.status
+      isLoggedIn: state => !!state.token,
+      authStatus: state => state.status,
+      currUser: state => state.user
     },
 
     plugins: [vuexLocal.plugin]

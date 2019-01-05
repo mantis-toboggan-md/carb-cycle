@@ -1,24 +1,6 @@
 <template>
   <div id="foodMain">
-    <div class = "md-layout">
-      <div class = "md-layout-item">
-        <md-toolbar class="md-primary md-large">
-          <div class="md-toolbar-row">
-            <div class="md-toolbar-section-start">
-              <span class="md-title">carb cycle</span>
-            </div>
-            <div class='md-toolbar-section-end'>
-              <!-- <a href='/login' id='login-button'>Login</a> -->
-             <router-link to="/login" id='login-button'>Login</router-link>
-           </div>
-         </div>
-        </md-toolbar>
-      </div>
-    </div>
-    <div class = "md-layout">
-        <md-button v-on:click='getData()'>get data</md-button>
-    </div>
-    butts: {{this.$store.state}}
+    <my-header></my-header>
       <div class = "md-layout">
         <div class = "md-layout-item">
           <md-steppers :md-active-step.sync="currStep" md-linear md-vertical>
@@ -37,6 +19,7 @@
 <script>
 import activityLevel from '@/components/activity-level'
 import caloricIntake from '@/components/caloric-intake'
+import myHeader from '@/components/header'
 const axios = require('axios')
 // /axios.defaults.withCredentials = true
 
@@ -73,18 +56,12 @@ export default {
          }
     },
 
-    //make axios call to get save data corresponding to username
-    getData: function(){
-      axios.get('http://localhost:8000/activity').then((response)=>{
-        console.log('ACTIVITY GOTTEN')
-      })
-    }
-
   },
 
   components: {
     activityLevel,
-    caloricIntake
+    caloricIntake,
+    myHeader
   }
 }
 

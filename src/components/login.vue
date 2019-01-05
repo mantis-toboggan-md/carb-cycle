@@ -9,6 +9,7 @@
             </div>
           </div>
         </md-toolbar>
+        {{this.$store.getters.authStatus}}
         <md-card>
           <md-card-header>
             <div class='md-title'>
@@ -85,7 +86,12 @@ let axios = require('axios')
           let username = this.username
           let password = this.password
           this.$store.dispatch('login', { username, password })
-             .then(() => this.$router.push('/'))
+             .then(()=>{
+               console.log(this.$store.getters.authStatus)
+               if(this.$store.getters.  authStatus == 'success'){
+                 this.$router.push('/')
+               }
+             })
       },
 
       createAccount: function(){
@@ -94,7 +100,11 @@ let axios = require('axios')
           new_email: this.new_email,
           new_password: this.new_password,
           new_password_conf: this.new_password_conf
-        })
+        }).then(() => this.$router.push('/login'))
+      },
+
+      logOut: function(){
+        this.$store.dispatch('logout')
       }
     }
   }

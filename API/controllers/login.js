@@ -13,6 +13,7 @@ module.exports = {
   postLogin: (req,res)=>{
     knex('users').where('username', req.body.username).then((results)=>{
       if(!results[0]) {
+        console.log(res)
         res.send('no user found')
         res.end()
       } else{
@@ -36,7 +37,7 @@ module.exports = {
         res.send('user already exists')
         res.end()
       } else if (req.body.new_password != req.body.new_password_conf){
-        res.send('passwords mismatched')
+        res.status(500).send('passwords mismatched')
         res.end()
       } else{
         bcrypt.hash(req.body.new_password, saltRounds, (err,hash)=>{
