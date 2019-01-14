@@ -4,13 +4,13 @@ const app = express();
 const bodyParser = require('body-parser');
 const port = process.env.PORT || 8000;
 const cowsay = require('cowsay')
-const ducksay = require('ducksay')
+const chalk = require('chalk')
 app.use(bodyParser.json({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.static(path.join(__dirname, "../dist")));
 
-require("./config/session.js")(app);
+require("./config/session.js")(app);  ``
 var routes_setter = require('./config/routes.js');
 routes_setter(app);
 // CORS middleware
@@ -24,8 +24,8 @@ const allowCrossDomain = function(req, res, next) {
 app.use(allowCrossDomain)
 app.listen(port, function() {
   console.clear()
-  console.log(cowsay.say({
+  console.log(chalk.cyan(cowsay.say({
     text: `server now running on port ${port}`,
     f: 'octopus'
-  }))
+  })))
 });

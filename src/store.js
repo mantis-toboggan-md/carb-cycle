@@ -1,19 +1,11 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
-import VuexPersistence from 'vuex-persist'
 
-const vuexLocal = new VuexPersistence({
-  //save only username when browser leaves page
-  // reducer: (state) => ({user: state.user}),
-  //store state (only username) in localStorage in browser
-  storage: window.localStorage
-})
 
 Vue.use(Vuex)
 
-const store = ()=> {
-  return new Vuex.Store({
+const store = {
     state: {
       status: '',
       token: localStorage.getItem('token') || '',
@@ -22,6 +14,9 @@ const store = ()=> {
     mutations: {
       auth_request(state){
         state.status = 'loading'
+      },
+      create_acc(state){
+        state.status = 'account created'
       },
       auth_success(state, userData){
         state.status = 'success'
@@ -62,11 +57,9 @@ const store = ()=> {
       },
       register ({commit}, user){
         return new Promise((resolve, reject)=>{
-            commit('auth_req')
+            commit('auth_request')
             axios({url:'http://localhost:8000/register', data:user, method: 'POST'}).then((res)=>{
-              const user = res.data.user
-              axios.defaults.headers.common['Authorization'] = token
-              commit('auth_success', user)
+              commit('create_acc')
               resolve(res)
             })
             .catch(err=>{
@@ -90,8 +83,6 @@ const store = ()=> {
       currUser: state => state.user
     },
 
-    plugins: [vuexLocal.plugin]
-  })
 }
 
 export default store

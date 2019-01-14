@@ -2,6 +2,7 @@
   <div id="foodMain">
     <my-header></my-header>
       <div class = "md-layout">
+        {{this.$store.getters.currUser}}
         <div class = "md-layout-item">
           <md-steppers :md-active-step.sync="currStep" md-linear md-vertical>
               <md-step id="first" md-label="Activity Level" :md-done.sync="first" :md-error="noWeightErr">
@@ -19,7 +20,7 @@
 <script>
 import activityLevel from '@/components/activity-level'
 import caloricIntake from '@/components/caloric-intake'
-import myHeader from '@/components/header'
+import myHeader from '@/components/my-header'
 const axios = require('axios')
 // /axios.defaults.withCredentials = true
 
