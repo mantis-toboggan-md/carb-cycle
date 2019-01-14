@@ -1,7 +1,7 @@
 /* eslint-disable */
 <template>
   <div id="activity-level" class = "md-elevation-3">
-    <div class="md-layout md-gutter" id="weightBF">
+    <div class="md-layout md-gutter md-alignment-center-center" id="weightBF">
       <div class="md-layout-item">
       <md-field>
         <label>Weight(lbs)</label>
@@ -14,6 +14,17 @@
         <md-input type = "number" v-model = "bfPercent"></md-input>
          <span class="md-helper-text">Default is 30</span>
       </md-field>
+    </div>
+    <div class="md-layout-item">
+      <md-field>
+        <label>plan name</label>
+        <md-input type = "text" v-model = "planName"></md-input>
+      </md-field>
+    </div>
+    <div class = 'md-layout-item'>
+      <md-button class="md-flat md-primary" v-on:click="savePlan()">
+        Save Plan
+      </md-button>
     </div>
   </div>
   <!-- <md-content> -->
@@ -121,6 +132,7 @@ import caloricIntake from '@/components/caloric-intake'
             intenseCardio: '',
           },
         ],
+        planName: ''
       }
     },
 
@@ -209,6 +221,49 @@ import caloricIntake from '@/components/caloric-intake'
           }
         }
         this.$emit('set-activity', [this.activityByDay, this.tdeeByDay, this.givenWeight, this.bfPercent])
+      },
+
+      savePlan: function(){
+        let plan = {
+          plan_name: this.planName,
+          user_id: this.$store.getters.currUser.id,
+          sunday_nonexercise_activity: this.activityByDay[0].selectedNEAT,
+          sunday_light_cardio: this.activityByDay[0].lightCardio,
+          sunday_moderate_cardio: this.activityByDay[0].moderateCardio,
+          sunday_intense_cardio: this.activityByDay[0].intenseCardio,
+          sunday_str: this.activityByDay[0].str,
+          monday_nonexercise_activity: this.activityByDay[1].selectedNEAT,
+          monday_light_cardio: this.activityByDay[1].lightCardio,
+          monday_moderate_cardio: this.activityByDay[1].moderateCardio,
+          monday_intense_cardio: this.activityByDay[1].intenseCardio,
+          monday_str: this.activityByDay[1].str,
+          tuesday_nonexercise_activity: this.activityByDay[2].selectedNEAT,
+          tuesday_light_cardio: this.activityByDay[2].lightCardio,
+          tuesday_moderate_cardio: this.activityByDay[2].moderateCardio,
+          tuesday_intense_cardio: this.activityByDay[2].intenseCardio,
+          tuesday_str: this.activityByDay[2].str,
+          wednesday_nonexercise_activity: this.activityByDay[3].selectedNEAT,
+          wednesday_light_cardio: this.activityByDay[3].lightCardio,
+          wednesday_moderate_cardio: this.activityByDay[3].moderateCardio,
+          wednesday_intense_cardio: this.activityByDay[3].intenseCardio,
+          wednesday_str: this.activityByDay[3].str,
+          thursday_nonexercise_activity: this.activityByDay[4].selectedNEAT,
+          thursday_light_cardio: this.activityByDay[4].lightCardio,
+          thursday_moderate_cardio: this.activityByDay[4].moderateCardio,
+          thursday_intense_cardio: this.activityByDay[4].intenseCardio,
+          thursday_str: this.activityByDay[4].str,
+          friday_nonexercise_activity: this.activityByDay[5].selectedNEAT,
+          friday_light_cardio: this.activityByDay[5].lightCardio,
+          friday_moderate_cardio: this.activityByDay[5].moderateCardio,
+          friday_intense_cardio: this.activityByDay[5].intenseCardio,
+          friday_str: this.activityByDay[5].str,
+          saturday_nonexercise_activity: this.activityByDay[6].selectedNEAT,
+          saturday_light_cardio: this.activityByDay[6].lightCardio,
+          saturday_moderate_cardio: this.activityByDay[6].moderateCardio,
+          saturday_intense_cardio: this.activityByDay[6].intenseCardio,
+          saturday_str: this.activityByDay[6].str,
+        }
+        this.$store.dispatch('savePlan', plan)
       }
     },
 

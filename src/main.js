@@ -4,8 +4,8 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import Vuex from 'vuex'
-import activityStore from './store.js'
-// const store = new Store()
+import authStore from './authStore.js'
+import activityStore from './activityStore.js'
 
 import VueMaterial from 'vue-material'
 import 'vue-material/dist/vue-material.min.css'
@@ -29,6 +29,7 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   modules: {
+    authStore,
     activityStore
   },
   plugins: [vuexLocal.plugin]

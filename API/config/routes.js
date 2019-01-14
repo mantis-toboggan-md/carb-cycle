@@ -5,5 +5,5 @@ module.exports = function(app){
   app.get('/', login_controllers.getIndex);
   app.post('/login', login_controllers.postLogin)
   app.post('/register', login_controllers.createAccount)
-  app.get('/activity', profile_controllers.getActivity)
+  app.post('/plan', profile_controllers.savePlan)
 }
