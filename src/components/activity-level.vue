@@ -26,10 +26,10 @@
         Save Plan
       </md-button>
     </div>
-    <div class = 'md-layout-item'>
+    <div class = 'md-layout-item' v-if='this.$store.getters.authStatus == "success"'>
       <md-field>
         <md-select v-on:input = 'loadPlan()' v-model='loadedPlan'>
-          <md-option v-for='plan in this.$store.getters.plans' :value = 'plan.id'>{{plan.plan_name}}</md-option>
+          <md-option v-for='plan in this.$store.getters.plans' :key="plan.id" :value = 'plan.plan_name'>{{plan.plan_name}}</md-option>
         </md-select>
       </md-field>
     </div>
@@ -82,7 +82,6 @@ import caloricIntake from '@/components/caloric-intake'
   export default {
     name: 'activity-level',
 
-    // props: ['givenWeight', 'bfPercent'],
 
     data () {
       return{
@@ -140,7 +139,7 @@ import caloricIntake from '@/components/caloric-intake'
           },
         ],
         planName: '',
-        loadedPlan: [],
+        loadedPlan: '',
       }
     },
 
@@ -272,14 +271,56 @@ import caloricIntake from '@/components/caloric-intake'
           saturday_str: this.activityByDay[6].str,
         }
         this.$store.dispatch('savePlan', plan)
-      },
-
-      getPlans: function(){
         this.$store.dispatch('getPlans')
+
       },
 
       loadPlan: function(){
-        console.log(this.loadedPlan)
+        //display loaded plan on input box of 'save plan'
+        this.planName = this.loadedPlan
+        let allPlans = this.$store.getters.plans
+        let chosenPlan;
+        //get plan data from store of all user's plans
+        allPlans.map((plan)=>{
+          if(plan.plan_name == this.loadedPlan){
+            chosenPlan = plan
+          }
+        })
+        this.activityByDay[0].selectedNEAT = chosenPlan.sunday_nonexercise_activity
+        this.activityByDay[0].lightCardio = chosenPlan.sunday_light_cardio
+        this.activityByDay[0].moderateCardio = chosenPlan.sunday_moderate_cardio
+        this.activityByDay[0].intenseCardio = chosenPlan.sunday_intense_cardio
+        this.activityByDay[0].str=chosenPlan.sunday_str
+        this.activityByDay[1].selectedNEAT = chosenPlan.monday_nonexercise_activity
+        this.activityByDay[1].lightCardio = chosenPlan.monday_light_cardio
+        this.activityByDay[1].moderateCardio = chosenPlan.monday_moderate_cardio
+        this.activityByDay[1].intenseCardio = chosenPlan.monday_intense_cardio
+        this.activityByDay[1].str=chosenPlan.monday_str
+        this.activityByDay[2].selectedNEAT = chosenPlan.tuesday_nonexercise_activity
+        this.activityByDay[2].lightCardio = chosenPlan.tuesday_light_cardio
+        this.activityByDay[2].moderateCardio = chosenPlan.tuesday_moderate_cardio
+        this.activityByDay[2].intenseCardio = chosenPlan.tuesday_intense_cardio
+        this.activityByDay[2].str=chosenPlan.tuesday_str
+        this.activityByDay[3].selectedNEAT = chosenPlan.wednesday_nonexercise_activity
+        this.activityByDay[3].lightCardio = chosenPlan.wednesday_light_cardio
+        this.activityByDay[3].moderateCardio = chosenPlan.wednesday_moderate_cardio
+        this.activityByDay[3].intenseCardio = chosenPlan.wednesday_intense_cardio
+        this.activityByDay[3].str=chosenPlan.wednesday_str
+        this.activityByDay[4].selectedNEAT = chosenPlan.thursday_nonexercise_activity
+        this.activityByDay[4].lightCardio = chosenPlan.thursday_light_cardio
+        this.activityByDay[4].moderateCardio = chosenPlan.thursday_moderate_cardio
+        this.activityByDay[4].intenseCardio = chosenPlan.thursday_intense_cardio
+        this.activityByDay[4].str=chosenPlan.thursday_str
+        this.activityByDay[5].selectedNEAT = chosenPlan.friday_nonexercise_activity
+        this.activityByDay[5].lightCardio = chosenPlan.friday_light_cardio
+        this.activityByDay[5].moderateCardio = chosenPlan.friday_moderate_cardio
+        this.activityByDay[5].intenseCardio = chosenPlan.friday_intense_cardio
+        this.activityByDay[5].str=chosenPlan.friday_str
+        this.activityByDay[6].selectedNEAT = chosenPlan.saturday_nonexercise_activity
+        this.activityByDay[6].lightCardio = chosenPlan.saturday_light_cardio
+        this.activityByDay[6].moderateCardio = chosenPlan.saturday_moderate_cardio
+        this.activityByDay[6].intenseCardio = chosenPlan.saturday_intense_cardio
+        this.activityByDay[6].str=chosenPlan.saturday_str
       }
     },
 
