@@ -40,10 +40,11 @@ const store = {
             if(typeof res.data == 'string'){
               commit('auth_error', res.data)
             } else {
-              const userData = {
+              var userData = {
                 user: res.data.user,
                 token: res.data.token
               }
+              localStorage.setItem('token', userData.token)
               axios.defaults.headers.common['Authorization'] = userData.token
               commit('auth_success', userData)
               resolve(res)

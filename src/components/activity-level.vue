@@ -15,16 +15,23 @@
          <span class="md-helper-text">Default is 30</span>
       </md-field>
     </div>
-    <div class="md-layout-item">
+    <div class="md-layout-item" v-if='this.$store.getters.authStatus == "success"'>
       <md-field>
         <label>plan name</label>
         <md-input type = "text" v-model = "planName"></md-input>
       </md-field>
     </div>
-    <div class = 'md-layout-item'>
+    <div class = 'md-layout-item' v-if='this.$store.getters.authStatus == "success"'>
       <md-button class="md-flat md-primary" v-on:click="savePlan()">
         Save Plan
       </md-button>
+    </div>
+    <div class = 'md-layout-item'>
+      <md-field>
+        <md-select v-on:input = 'loadPlan()' v-model='loadedPlan'>
+          <md-option v-for='plan in this.$store.getters.plans' :value = 'plan.id'>{{plan.plan_name}}</md-option>
+        </md-select>
+      </md-field>
     </div>
   </div>
   <!-- <md-content> -->
@@ -132,7 +139,8 @@ import caloricIntake from '@/components/caloric-intake'
             intenseCardio: '',
           },
         ],
-        planName: ''
+        planName: '',
+        loadedPlan: [],
       }
     },
 
@@ -264,7 +272,19 @@ import caloricIntake from '@/components/caloric-intake'
           saturday_str: this.activityByDay[6].str,
         }
         this.$store.dispatch('savePlan', plan)
+      },
+
+      getPlans: function(){
+        this.$store.dispatch('getPlans')
+      },
+
+      loadPlan: function(){
+        console.log(this.loadedPlan)
       }
+    },
+
+    created: function(){
+      this.$store.dispatch('getPlans')
     },
 
     components: {
@@ -284,9 +304,9 @@ import caloricIntake from '@/components/caloric-intake'
   justify-content: center;
 
 }
-#weightBF{
+/* #weightBF{
     max-width:500px;
-}
+} */
 #activity-input-table{
   display: flex;
   justify-content: space-around;
