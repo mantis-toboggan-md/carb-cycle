@@ -49,19 +49,19 @@
               <span class="md-helper-text">non-exercise activity</span>
             </md-field>
             <md-field>
-              <md-input v-model="day.lightCardio" class="activity-input-box"></md-input>
+              <md-input v-model="day.lightCardio" class="activity-input-box" v-on:click="clearInput($event)" autocomplete='off'></md-input>
               <span class="md-helper-text">light cardio</span>
             </md-field>
             <md-field>
-              <md-input v-model="day.moderateCardio" class="activity-input-box"></md-input>
+              <md-input v-model="day.moderateCardio" class="activity-input-box" v-on:click="clearInput($event)" autocomplete='off'></md-input>
               <span class="md-helper-text">moderate cardio</span>
             </md-field>
             <md-field>
-              <md-input v-model="day.intenseCardio" class="activity-input-box"></md-input>
+              <md-input v-model="day.intenseCardio" class="activity-input-box" v-on:click="clearInput($event)" autocomplete='off'></md-input>
               <span class="md-helper-text">intense cardio</span>
             </md-field>
             <md-field>
-              <md-input v-model="day.str" class="activity-input-box"></md-input>
+              <md-input v-model="day.str" class="activity-input-box" v-on:click="clearInput($event)" autocomplete='off'></md-input>
               <span class="md-helper-text">strength</span>
             </md-field>
         </div>
@@ -85,57 +85,57 @@ import caloricIntake from '@/components/caloric-intake'
 
     data () {
       return{
-        givenWeight: '',
-        bfPercent: '',
+        givenWeight: this.$store.getters.weight,
+        bfPercent: this.$store.getters.bfPer,
         activityByDay: [
           {day: "sunday",
             selectedNEAT: 'Sedentary',
-            str: '',
-            lightCardio: '',
-            moderateCardio: '',
-            intenseCardio: '',
+            str: 0,
+            lightCardio: 0,
+            moderateCardio: 0,
+            intenseCardio: 0,
           },
           {day: "monday",
             selectedNEAT: 'Sedentary',
-            str: '',
-            lightCardio: '',
-            moderateCardio: '',
-            intenseCardio: '',
+            str: 0,
+            lightCardio: 0,
+            moderateCardio: 0,
+            intenseCardio: 0,
           },
           {day: "tuesday",
             selectedNEAT: 'Sedentary',
-            str: '',
-            lightCardio: '',
-            moderateCardio: '',
-            intenseCardio: '',
+            str: 0,
+            lightCardio: 0,
+            moderateCardio: 0,
+            intenseCardio: 0,
           },
           {day: "wednesday",
             selectedNEAT: 'Sedentary',
-            str: '',
-            lightCardio: '',
-            moderateCardio: '',
-            intenseCardio: '',
+            str: 0,
+            lightCardio: 0,
+            moderateCardio: 0,
+            intenseCardio: 0,
           },
           {day: "thursday",
             selectedNEAT: 'Sedentary',
-            str: '',
-            lightCardio: '',
-            moderateCardio: '',
-            intenseCardio: '',
+            str: 0,
+            lightCardio: 0,
+            moderateCardio: 0,
+            intenseCardio: 0,
           },
           {day: "friday",
             selectedNEAT: 'Sedentary',
-            str: '',
-            lightCardio: '',
-            moderateCardio: '',
-            intenseCardio: '',
+            str: 0,
+            lightCardio: 0,
+            moderateCardio: 0,
+            intenseCardio: 0,
           },
           {day: "saturday",
             selectedNEAT: 'Sedentary',
-            str: '',
-            lightCardio: '',
-            moderateCardio: '',
-            intenseCardio: '',
+            str: 0,
+            lightCardio: 0,
+            moderateCardio: 0,
+            intenseCardio: 0,
           },
         ],
         planName: '',
@@ -209,9 +209,14 @@ import caloricIntake from '@/components/caloric-intake'
           }
           return tdeeByDay;
       },
+
     },
 
     methods: {
+      clearInput: function(e){
+        e.target.value = ''
+      },
+
       setActivty: function(){
         for(let i = 0; i < 7; i++){
           if(!this.activityByDay[i].lightCardio){
@@ -228,6 +233,7 @@ import caloricIntake from '@/components/caloric-intake'
           }
         }
         this.$emit('set-activity', [this.activityByDay, this.tdeeByDay, this.givenWeight, this.bfPercent])
+        this.$store.dispatch('saveWeight', {weight: this.givenWeight, bf_per: this.bfPercent})
       },
 
       savePlan: function(){
@@ -326,6 +332,7 @@ import caloricIntake from '@/components/caloric-intake'
 
     created: function(){
       this.$store.dispatch('getPlans')
+      this.$store.dispatch('getCurrWeight')
     },
 
     components: {

@@ -11,4 +11,8 @@ module.exports = function(app){
   app.post('/plan', profile_controllers.savePlan)
   //load user's activity plans when activity component is loaded
   app.get('/plan', profile_controllers.getPlans)
+  //save user weight and bf per in db
+  app.post('/weight', profile_controllers.saveWeight)
+  //load most recent user weight and bf per from db
+  app.get('/weight', profile_controllers.currWeight)
 }

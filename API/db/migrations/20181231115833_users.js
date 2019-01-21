@@ -4,9 +4,7 @@ exports.up = function(knex, Promise) {
     table.increments()
     table.string('username')
     table.string('email')
-    table.string('password'),
-    table.integer('weight'),
-    table.integer('bf_per')
+    table.string('password')
     table.timestamps(true,true)
   })
 };
