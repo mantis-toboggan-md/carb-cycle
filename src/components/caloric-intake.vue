@@ -1,10 +1,10 @@
 /* eslint-disable */
 <template>
   <div id="caloricIntake" class = "md-elevation-3">
-    <div class = "md-layout md-gutter">
-      <div class = "md-layout-item">
-        Select carb consumption style:
-        <md-field id = "carb-style-select">
+    <div class = "md-layout md-gutter" id='carb-style-row'>
+      <div class = "md-layout-item" id = "carb-style-select">
+        <!-- Select carb consumption style: -->
+        <md-field>
           <md-select v-model="carbStyle">
             <md-option value = "Ketogenic">Ketogenic</md-option>
             <md-option value = "Day Before Exercise">Day before exercise</md-option>
@@ -12,6 +12,12 @@
             <md-option value = 'Carb me the FUCK up'>Carb me the FUCK up</md-option>
             <md-option value = 'Custom day-by-day'>Custom day-by-day</md-option>
           </md-select>
+        </md-field>
+      </div>
+      <div class = 'md-layout-item'>
+        <md-field v-if='carbStyle == "Weekend Refeed"' id ='weekly-surplus-input'>
+          <md-input v-model = "targetSurplus"></md-input>
+          <span class="md-helper-text">surplus (%)</span>
         </md-field>
       </div>
     </div>
@@ -23,12 +29,13 @@
           <span>Carbs</span>
           <span>Fat</span>
         </div>
+
         <div class = 'md-layout-item activity-cols' v-for = "(day, i) in macrosByDay">
           {{day.day}}
-          <md-field>
-          <md-input v-model = "surplusByDay[i]"></md-input>
-          <span class="md-helper-text">surplus (%)</span>
-        </md-field>
+          <md-field v-if='carbStyle !="Weekend Refeed"'>
+            <md-input v-model = "surplusByDay[i]"></md-input>
+            <span class="md-helper-text">surplus (%)</span>
+          </md-field>
         <div>
           {{tdeeByDay[i]}}
         </div>
@@ -54,6 +61,7 @@
 </template>
 
 <script>
+const macroCalc = require('../assets/computeMacros.js')
   export default {
     name: 'caloric-intake',
 
@@ -62,7 +70,14 @@
     data() {
       return {
         surplusByDay: [0,0,0,0,0,0,0],
-        carbStyle: 'Ketogenic'
+        carbStyle: 'Ketogenic',
+        targetSurplus: 0
+      }
+    },
+
+    methods: {
+      getMacros: function(){
+        macroCalc.testFunc('something')
       }
     },
 
@@ -77,6 +92,12 @@
         return parseInt(this.givenWeight) - (parseInt(this.givenWeight) * (bfPercent/100));
       },
       macrosByDay: function(){
+        //for weekend refeeds, set day-by-day surpluses to avg of week
+        if(this.carbStyle == 'Weekend Refeed'){
+          for(let i = 0; i < 7; i++){
+            this.surplusByDay[i] = (this.targetSurplus)
+          }
+        }
         let macrosByDay = [
           { day: 'Sunday',
             carb: '',
@@ -146,39 +167,44 @@
             }
           }
           macrosByDay[i].protein = Math.floor(macrosByDay[i].protein)
-
+        }
           //carbs by user-chosen style
           switch (this.carbStyle){
             case 'Ketogenic':
-              macrosByDay[i].carb = 25;
-              macrosByDay[i].fat = parseInt((macrosByDay[i].goalCals - (macrosByDay[i].protein + macrosByDay[i].carb)*4)/9)
+              macrosByDay = macroCalc.ketogenic(macrosByDay)
               break;
             case 'Carb me the FUCK up':
-              macrosByDay[i].fat = 30;
-              macrosByDay[i].carb = parseInt((macrosByDay[i].goalCals - (macrosByDay[i].protein*4 + macrosByDay[i].fat*9))/4)
+              macrosByDay = macroCalc.carbMeUp(macrosByDay)
+              break;
+            case 'Weekend Refeed':
+              macrosByDay = macroCalc.weekendRefeed(macrosByDay)
           }
-
-
-
-
-        }
         return macrosByDay;
       },
       weeklySurplus: function(){
-        let sum = 0;
-        for(let i = 0; i < 7; i++){
-          sum += (this.tdeeByDay[i]*this.surplusByDay[i]/100)
+        let weeklyIntake = 0;
+        let weeklyTdee = 0
+        for(let i = 0 ; i < 7; i ++){
+          weeklyTdee += parseInt(this.tdeeByDay[i])
+          weeklyIntake += this.macrosByDay[i].goalCals
         }
-        return sum;
+        return Math.ceil(weeklyIntake-weeklyTdee)
     }
 
   }
   }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .md-elevation-3{
   padding: 5px;
+}
+#carb-style-row{
+  justify-content: flex-start;
+  align-items:flex-start;
+}
+#weekly-surplus-input{
+  max-width: 80px;
 }
 #carb-style-select{
   max-width: 300px;

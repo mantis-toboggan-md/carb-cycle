@@ -19,7 +19,8 @@ const store = {
     save_weight(state,data){
       state.weight = data.weight
       state.bfPer = data.bf_per
-    }
+    },
+
   },
   actions: {
     savePlan({commit}, plan){
@@ -42,7 +43,7 @@ const store = {
 
     getCurrWeight({commit}){
       axios({url:'http://localhost:8000/weight', method:'GET'}).then(res=>{
-        commit('load_weight', res.data)
+        commit('save_weight', res.data)
       })
     }
   },

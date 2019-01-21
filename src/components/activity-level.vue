@@ -1,34 +1,34 @@
 /* eslint-disable */
 <template>
   <div id="activity-level" class = "md-elevation-3">
-    <div class="md-layout md-gutter md-alignment-center-center" id="weightBF">
-      <div class="md-layout-item">
+    <div class="md-layout md-gutter md-alignment-left-center" id="weightBF">
+      <div class="md-layout-item md-size-10">
       <md-field>
         <label>Weight(lbs)</label>
         <md-input type = "number" v-model = "givenWeight"></md-input>
       </md-field>
     </div>
-    <div class="md-layout-item">
+    <div class="md-layout-item md-size-10">
       <md-field>
         <label>Bodyfat %</label>
         <md-input type = "number" v-model = "bfPercent"></md-input>
          <span class="md-helper-text">Default is 30</span>
       </md-field>
     </div>
-    <div class="md-layout-item" v-if='this.$store.getters.authStatus == "success"'>
+    <div class="md-layout-item md-size-20" v-if='this.$store.getters.authStatus == "success"'>
       <md-field>
         <label>plan name</label>
         <md-input type = "text" v-model = "planName"></md-input>
       </md-field>
     </div>
-    <div class = 'md-layout-item' v-if='this.$store.getters.authStatus == "success"'>
+    <div class = 'md-layout-item md-size-10' v-if='this.$store.getters.authStatus == "success"' id='plan-btn'>
       <md-button class="md-flat md-primary" v-on:click="savePlan()">
         Save Plan
       </md-button>
     </div>
-    <div class = 'md-layout-item' v-if='this.$store.getters.authStatus == "success"'>
+    <div class = 'md-layout-item md-size-20' v-if='this.$store.getters.authStatus == "success"'>
       <md-field>
-        <md-select v-on:input = 'loadPlan()' v-model='loadedPlan'>
+        <md-select v-on:input = 'loadPlan()' v-model='loadedPlan' placeholder = 'load a saved plan'>
           <md-option v-for='plan in this.$store.getters.plans' :key="plan.id" :value = 'plan.plan_name'>{{plan.plan_name}}</md-option>
         </md-select>
       </md-field>
@@ -352,9 +352,15 @@ import caloricIntake from '@/components/caloric-intake'
   justify-content: center;
 
 }
-/* #weightBF{
-    max-width:500px;
-} */
+#weightBF{
+    max-width:100%;
+    justify-content: flex-start;
+    align-items: center;
+}
+#plan-btn{
+  padding-left: 0px;
+  margin-left: -2%;
+}
 #activity-input-table{
   display: flex;
   justify-content: space-around;
