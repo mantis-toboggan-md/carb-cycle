@@ -53,7 +53,20 @@ module.exports = {
     return macrosByDay
   },
 
-  beforeExercise: ()=>{
-
+  customRatio: (macrosByDay, ratioByDay)=>{
+    console.log(ratioByDay)
+    for(let i = 0; i < 7; i++){
+      //get remaining cals to split between carb and fat
+      let remCals = macrosByDay[i].goalCals - (macrosByDay[i].protein * 4)
+      //convert inputted numbers to ints
+      ratioByDay[i].carb = parseInt(ratioByDay[i].carb)
+      ratioByDay[i].fat = parseInt(ratioByDay[i].fat)
+      //solve 2-equation system:
+      //total = 4*carb + 9 * fat
+      //4*carb/9*fat = carbRatio/fatRatio
+      macrosByDay[i].fat = Math.floor(( remCals / ((ratioByDay[i].carb/ratioByDay[i].fat)+1))/9)
+      macrosByDay[i].carb = Math.floor((remCals - (macrosByDay[i].fat*9))/4)
+    }
+    return macrosByDay
   }
 }

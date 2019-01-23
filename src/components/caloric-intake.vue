@@ -7,7 +7,6 @@
         <md-field>
           <md-select v-model="carbStyle">
             <md-option value = "Ketogenic">Ketogenic</md-option>
-            <md-option value = "Day Before Exercise">Day before exercise</md-option>
             <md-option value = "Weekend Refeed">Weekend refeeds</md-option>
             <md-option value = 'Carb me the FUCK up'>Carb me the FUCK up</md-option>
             <md-option value = 'Custom day-by-day'>Custom day-by-day</md-option>
@@ -23,6 +22,7 @@
     </div>
       <div class = "md-layout md-gutter">
         <div class = 'md-layout-item activity-cols' id = 'macro-labels'>
+          <span id='ratio-label' v-if = 'carbStyle == "Custom day-by-day"'>Carbs : Fat</span>
           <span>TDEE</span>
           <span>Goal Intake</span>
           <span>Protein</span>
@@ -36,6 +36,16 @@
             <md-input v-model = "surplusByDay[i]"></md-input>
             <span class="md-helper-text">surplus (%)</span>
           </md-field>
+          <div v-if='carbStyle =="Custom day-by-day"' id ='carb-fat-ratio'>
+            <md-field class = 'ratio'>
+              <md-input v-model = "ratioByDay[i].carb" v-on:click = "clearInput($event)" type='number'></md-input>
+            </md-field>
+            :
+            <md-field class = 'ratio'>
+              <md-input v-model = "ratioByDay[i].fat" v-on:click = "clearInput($event)" type='number'></md-input>
+            </md-field>
+          </div>
+        <div id='macro-column'>
         <div>
           {{tdeeByDay[i]}}
         </div>
@@ -51,10 +61,11 @@
         <div>
           {{macrosByDay[i].fat}}
         </div>
+      </div>
         </div>
       </div>
       <div class = 'md-layout md-gutter' id="net-surplus">
-      Net caloric surplus: {{weeklySurplus}}
+      Weekly caloric surplus: {{weeklySurplus}}
     </div>
     </div>
   </div>
@@ -70,12 +81,17 @@ const macroCalc = require('../assets/computeMacros.js')
     data() {
       return {
         surplusByDay: [0,0,0,0,0,0,0],
+        ratioByDay: [{carb: 1, fat: 1}, {carb: 1, fat: 1}, {carb: 1, fat: 1}, {carb: 1, fat: 1}, {carb: 1, fat: 1}, {carb: 1, fat: 1}, {carb: 1, fat: 1}],
         carbStyle: 'Ketogenic',
         targetSurplus: 0
       }
     },
 
     methods: {
+      clearInput: function(e){
+        e.target.value = ''
+      },
+
       getMacros: function(){
         macroCalc.testFunc('something')
       }
@@ -178,6 +194,9 @@ const macroCalc = require('../assets/computeMacros.js')
               break;
             case 'Weekend Refeed':
               macrosByDay = macroCalc.weekendRefeed(macrosByDay)
+              break;
+            case 'Custom day-by-day':
+              macrosByDay = macroCalc.customRatio(macrosByDay, this.ratioByDay)
           }
         return macrosByDay;
       },
@@ -203,6 +222,20 @@ const macroCalc = require('../assets/computeMacros.js')
   justify-content: flex-start;
   align-items:flex-start;
 }
+#carb-fat-ratio{
+  & input{
+    max-width: 10px;
+    display: inline;
+    padding-top: 2px;
+  }
+  & .ratio{
+    width: 45%;
+    display: inline;
+  }
+}
+#ratio-label{
+  padding-top: 2px;
+}
 #weekly-surplus-input{
   max-width: 80px;
 }
@@ -218,6 +251,24 @@ const macroCalc = require('../assets/computeMacros.js')
   flex-direction: column;
   justify-content: flex-end;
   background-color: white;
+  & span{
+    padding-top: 2px;
+  }
+}
+#macro-column{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  & div{
+    padding-top: 2px;
+  }
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0;
 }
 
 </style>

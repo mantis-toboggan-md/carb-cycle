@@ -4,7 +4,7 @@
       <md-toolbar class="md-primary md-large">
         <div class="md-toolbar-row">
           <div class="md-toolbar-section-start">
-            <span class="md-title">carb cycle</span>
+            <router-link to= '/' class="md-title">carb cycle</router-link>
           </div>
           <div class='md-toolbar-section-end'>
            <router-link v-if="this.$store.getters.authStatus !== 'success'" to="/login" id='login-button'>Login</router-link>
