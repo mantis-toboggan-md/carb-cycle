@@ -35,7 +35,6 @@ const store = {
       login ({commit}, user){
         return new Promise((resolve, reject)=>{
           commit('auth_request')
-          console.log(user)
           axios({url:'http://localhost:8000/login', data:user, method: 'POST'}).then((res)=>{
             if(typeof res.data == 'string'){
               commit('auth_error', res.data)

@@ -2,7 +2,6 @@
   <div id="foodMain">
     <my-header></my-header>
       <div class = "md-layout">
-        {{this.$store.getters.currUser}}
         <div class = "md-layout-item">
           <md-steppers :md-active-step.sync="currStep" md-linear md-vertical>
               <md-step id="first" md-label="Activity Level" :md-done.sync="first" :md-error="noWeightErr">
@@ -69,6 +68,10 @@ export default {
 </script>
 
 <style lang="scss">
+body{
+  background-color: #F5F5F5;
+  font-family: 'Ubuntu', sans-serif !important;
+}
 .md-stepper-header:hover{
   background-color: white;
   transition: none;
@@ -78,7 +81,7 @@ export default {
 }
 .md-stepper-header{
   & .md-ripple{
-    background-color: white;
+    background-color: #F5F5F5;
   }
 }
 .md-layout-item{
@@ -87,9 +90,16 @@ export default {
 .md-steppers{
   padding-left: 5vw;
   padding-right:5vw;
+  background-color: #F5F5F5 !important;
 }
 #login-button{
   color: white;
 }
+#activity-level, #caloricIntake{
+  background-color: white !important;
+}
 
+#caloricIntake{
+  overflow: hidden;
+}
 </style>

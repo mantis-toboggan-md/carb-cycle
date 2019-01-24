@@ -31,7 +31,7 @@
         </div>
 
         <div class = 'md-layout-item activity-cols' v-for = "(day, i) in macrosByDay">
-          {{day.day}}
+          <span class = 'md-headline'>{{day.day}}</span>
           <md-field v-if='carbStyle !="Weekend Refeed"'>
             <md-input v-model = "surplusByDay[i]"></md-input>
             <span class="md-helper-text">surplus (%)</span>
