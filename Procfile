@@ -1,1 +1,1 @@
-web: API/server.js
+web: ./API/server.js
