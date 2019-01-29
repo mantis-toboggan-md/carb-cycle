@@ -20,6 +20,7 @@
     "cowsay": "^1.4.0",
     "ducksay": "^4.1.0",
     "express": "^4.16.4",
+    "express-favicon": "^2.0.1",
     "express-session": "^1.15.6",
     "http-proxy-middleware": "^0.19.1",
     "jsonwebtoken": "^8.4.0",
