@@ -14,8 +14,8 @@ app.use(express.static(path.join(__dirname, "../dist")));
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 
 require("./config/session.js")(app);  ``
-var routes_setter = require('./config/routes.js');
-routes_setter(app);
+// var routes_setter = require('./config/routes.js');
+// routes_setter(app);
 // CORS middleware
 const allowCrossDomain = function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');

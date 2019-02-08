@@ -6,12 +6,12 @@
           <div class="md-toolbar-section-start">
             <router-link to= '/' class="md-title" id='header-title'>carb cycle</router-link>
           </div>
-          <div class='md-toolbar-section-end'>
+          <!-- <div class='md-toolbar-section-end'>
            <router-link v-if="this.$store.getters.authStatus !== 'success'" to="/login" id='login-button'><md-button class='md-accent'>Login</md-button></router-link>
            <md-button v-if="this.$store.getters.authStatus == 'success'" class="md-accent" v-on:click="logout()">
              Log Out
            </md-button>
-         </div>
+         </div> -->
        </div>
       </md-toolbar>
     </div>
